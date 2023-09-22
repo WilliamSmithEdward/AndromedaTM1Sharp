@@ -7,7 +7,7 @@ namespace AndromedaTM1Sharp
     {
         public async static Task WriteCubeCellValue(TM1SharpConfig tm1, string cubeName, List<CellReference> cellReferenceList)
         {
-            var client = TM1SharpConfig.GetTM1RestClient(tm1);
+            var client = tm1.GetTM1RestClient();
 
             foreach (var cellReference in cellReferenceList)
             {

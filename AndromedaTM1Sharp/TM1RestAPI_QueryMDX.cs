@@ -7,7 +7,7 @@ namespace AndromedaTM1Sharp
     {
         public async static Task<string> QueryMDX(TM1SharpConfig tm1, string mdxStatement)
         {
-            var client = TM1SharpConfig.GetTM1RestClient(tm1);
+            var client = tm1.GetTM1RestClient();
 
             var jsonBody = new StringBuilder();
 

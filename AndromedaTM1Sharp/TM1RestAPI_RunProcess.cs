@@ -7,7 +7,7 @@ namespace AndromedaTM1Sharp
     {
         public async static Task<string> RunProcess(TM1SharpConfig tm1, string processName, Dictionary<string, string>? parameters = null)
         {
-            var client = TM1SharpConfig.GetTM1RestClient(tm1);
+            var client = tm1.GetTM1RestClient();
 
             var jsonBody = new StringBuilder();
 
