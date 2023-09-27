@@ -1,9 +1,14 @@
-﻿# AndromedaTM1Sharp
+# AndromedaTM1Sharp
 Author: William Smith  
 E-Mail: williamsmithe@icloud.com
 
+## Version 1.0.13 Update
+* Updated async method names to use MethodName+Async naming convention.
+* Updated readme examples to use the await keyword.
+* Added XML documentation to all public classes and class members.
+
 ## Version 1.0.12 Update
-Modified constructor on TM1SharpConfig class to accept parameter for ignoring SSL certificate errors (default false).
+* Modified constructor on TM1SharpConfig class to accept parameter for ignoring SSL certificate errors (default false).
 
 ```csharp
 public TM1SharpConfig(string tm1ServerURL, string userName, string password, string environment, bool ignoreSSLCertError = false)
@@ -31,9 +36,11 @@ List<string> lookupValues = new List<string>()
     "Lookup_Value_03"
 };
 
-lookupValues.ForEach(x =>
+lookupValues.ForEach(async x =>
 {
-    Console.WriteLine(TM1RestAPI.QueryCell(tm1Config, "Cube_Name", "Dimension_01", x, "Dimension_02", "Element_02"));
+    var result = await TM1RestAPI.QueryCellAsync(tm1Config, "Cube_Name", "Dimension_01", x, "Dimension_02", "Element_02");
+
+    Console.WriteLine(result);
 });
 ```
 
@@ -48,9 +55,9 @@ var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserNam
 
 string mdx = "SELECT {[DIMENSION1].[HIERARCHY].[ELEMENT]} ON 0, {[DIMENSION2].[HIERARCHY].[ELEMENT]} ON 1 FROM [YourCube]";
 
-var content = TM1RestAPI.QueryMDX(tm1Config, mdx);
+var content = await TM1RestAPI.QueryMDXAsync(tm1Config, mdx);
 
-Console.WriteLine(content.Result);
+Console.WriteLine(content);
 ```
 
 ## Reading from a cube view
@@ -62,9 +69,9 @@ using AndromedaTM1Sharp;
 
 var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserName", "tm1Password", "YourEnvName");
 
-var content = TM1RestAPI.QueryView(tm1Config, "YourCube", "YourView");
+var content = await TM1RestAPI.QueryViewAsync(tm1Config, "YourCube", "YourView");
 
-Console.WriteLine(content.Result);
+Console.WriteLine(content);
 ```
 
 ## Converting cellset JSON to System.Data.DataTable
@@ -79,9 +86,9 @@ var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserNam
 
 string mdx = @"Your_MDX_Statement";
 
-var content = TM1RestAPI.QueryMDX(tm1Config, mdx);
+var content = await TM1RestAPI.QueryMDXAsync(tm1Config, mdx);
 
-var model = CellsetJSONParser.ParseIntoObject(content.Result);
+var model = CellsetJSONParser.ParseIntoObject(content);
 
 var dt = model?.ToDataTable();
 
@@ -127,7 +134,7 @@ cubeUpdateKVPList.ForEach(x =>
     ));
 });
 
-await TM1RestAPI.WriteCubeCellValue(tm1Config, "YourCube", cellReferenceList);
+await TM1RestAPI.WriteCubeCellValueAsync(tm1Config, "YourCube", cellReferenceList);
 ```
 
 ## Querying a list of cubes
@@ -138,9 +145,9 @@ using AndromedaTM1Sharp;
 
 var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserName", "tm1Password", "YourEnvName");
 
-var content = TM1RestAPI.QueryCubeList(tm1Config);
+var content = await TM1RestAPI.QueryCubeListAsync(tm1Config);
 
-Console.WriteLine(content.Result);
+Console.WriteLine(content);
 ```
 
 ## Querying the dimensions of a cube
@@ -151,9 +158,9 @@ using AndromedaTM1Sharp;
 
 var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserName", "tm1Password", "YourEnvName");
 
-var content = TM1RestAPI.QueryCubeDimensions(tm1Config, "YourCube");
+var content = await TM1RestAPI.QueryCubeDimensionsAsync(tm1Config, "YourCube");
 
-Console.WriteLine(content.Result);
+Console.WriteLine(content);
 ```
 
 ## Running a Turbo Integrator process
@@ -165,7 +172,7 @@ using AndromedaTM1Sharp;
 
 var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserName", "tm1Password", "YourEnvName");
 
-var content = TM1RestAPI.RunProcess(tm1Config, "_CreateCubeProcess", new Dictionary<string, string>() { { "CubeName", "_NewCubeCreatedbyRestAPI" } });
+var content = await TM1RestAPI.RunProcessAsync(tm1Config, "_CreateCubeProcess", new Dictionary<string, string>() { { "CubeName", "_NewCubeCreatedbyRestAPI" } });
 
-Console.WriteLine(content.Result);
+Console.WriteLine(content);
 ```
