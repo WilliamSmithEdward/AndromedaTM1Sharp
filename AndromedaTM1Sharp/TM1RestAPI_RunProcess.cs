@@ -5,7 +5,14 @@ namespace AndromedaTM1Sharp
 {
     public partial class TM1RestAPI
     {
-        public async static Task<string> RunProcess(TM1SharpConfig tm1, string processName, Dictionary<string, string>? parameters = null)
+        /// <summary>
+        /// Asynchronously runs a TM1 process using the specified TM1SharpConfig, process name, and parameters (optional).
+        /// </summary>
+        /// <param name="tm1">The TM1SharpConfig instance.</param>
+        /// <param name="processName">The name of the TM1 process.</param>
+        /// <param name="parameters">A dictionary of parameters for the TM1 process (optional).</param>
+        /// <returns>A string representing the result of running the TM1 process.</returns>
+        public async static Task<string> RunProcessAsync(TM1SharpConfig tm1, string processName, Dictionary<string, string>? parameters = null)
         {
             var client = tm1.GetTM1RestClient();
 

@@ -5,7 +5,13 @@ namespace AndromedaTM1Sharp
 {
     public partial class TM1RestAPI
     {
-        public async static Task<string> QueryMDX(TM1SharpConfig tm1, string mdxStatement)
+        /// <summary>
+        /// Asynchronously executes an MDX query using the specified TM1SharpConfig and MDX statement.
+        /// </summary>
+        /// <param name="tm1">The TM1SharpConfig instance.</param>
+        /// <param name="mdxStatement">The MDX query statement.</param>
+        /// <returns>A string representing the result of the MDX query.</returns>
+        public async static Task<string> QueryMDXAsync(TM1SharpConfig tm1, string mdxStatement)
         {
             var client = tm1.GetTM1RestClient();
 

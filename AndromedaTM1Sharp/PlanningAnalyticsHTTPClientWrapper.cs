@@ -9,24 +9,24 @@ namespace AndromedaTM1Sharp
     {
         public HttpClient Client { get; private set; } = new HttpClient();
 
-        public static async Task<PlanningAnalyticsHTTPClientWrapper> Initialize(TM1SharpConfig tm1)
+        public static async Task<PlanningAnalyticsHTTPClientWrapper> InitializeAsync(TM1SharpConfig tm1)
         {
-            PlanningAnalyticsHTTPClientWrapper wrapper = new PlanningAnalyticsHTTPClientWrapper();
+            var wrapper = new PlanningAnalyticsHTTPClientWrapper();
 
             EncodingProvider provider = new CustomUtf8EncodingProvider();
             Encoding.RegisterProvider(provider);
 
-            HttpClientHandler clientHandler = new HttpClientHandler()
+            var clientHandler = new HttpClientHandler()
             {
                 UseCookies = true,
                 CookieContainer = new CookieContainer(),
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             };
 
-            clientHandler.ServerCertificateCustomValidationCallback += (sender, cert, chain, sslPolicyErrors) => { return true; };
+            if (tm1.IgnoreSSLCertError) clientHandler.ServerCertificateCustomValidationCallback += (sender, cert, chain, sslPolicyErrors) => { return true; };
             clientHandler.SslProtocols = SslProtocols.Tls12;
 
-            HttpClient client = new HttpClient(clientHandler);
+            var client = new HttpClient(clientHandler);
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
 

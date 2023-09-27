@@ -3,11 +3,19 @@ using System.Text.Json;
 
 namespace AndromedaTM1Sharp
 {
+    /// <summary>
+    /// Provides methods to interact with the Planning Analytics Workspace API.
+    /// </summary>
     public class PlanningAnalyticsWorkspaceAPI
     {
-        public async static Task<string> QueryObjectList(TM1SharpConfig tm1)
+        /// <summary>
+        /// Asynchronously queries the object list using the specified TM1SharpConfig.
+        /// </summary>
+        /// <param name="tm1">The TM1SharpConfig instance.</param>
+        /// <returns>A string representing the queried object list.</returns>
+        public async static Task<string> QueryObjectListAsync(TM1SharpConfig tm1)
         {
-            var clientWrapper = await PlanningAnalyticsHTTPClientWrapper.Initialize(tm1);
+            var clientWrapper = await PlanningAnalyticsHTTPClientWrapper.InitializeAsync(tm1);
 
             var response = await clientWrapper.Client.GetAsync(tm1.ServerHTTPSAddress + "/prism/harmony/tm1serverexplorer/api/v1/Servers('" + tm1.Environment + "')/ServerFolders?viewmode=architect&displayControlObjectsOnly=true&displayChores=true");
 
@@ -16,9 +24,14 @@ namespace AndromedaTM1Sharp
             return content;
         }
 
-        public async static Task<string> QueryCubeList(TM1SharpConfig tm1)
+        /// <summary>
+        /// Asynchronously queries the cube list using the specified TM1SharpConfig.
+        /// </summary>
+        /// <param name="tm1">The TM1SharpConfig instance.</param>
+        /// <returns>A string representing the queried cube list.</returns>
+        public async static Task<string> QueryCubeListAsync(TM1SharpConfig tm1)
         {
-            var clientWrapper = await PlanningAnalyticsHTTPClientWrapper.Initialize(tm1);
+            var clientWrapper = await PlanningAnalyticsHTTPClientWrapper.InitializeAsync(tm1);
 
             var response = await clientWrapper.Client.GetAsync(tm1.ServerHTTPSAddress + "/prism/harmony/tm1serverexplorer/api/v1/Servers('" + tm1.Environment + "')/Cubes?viewmode=architect");
 
@@ -27,9 +40,15 @@ namespace AndromedaTM1Sharp
             return content;
         }
 
-        public async static Task<string> QueryCubeDimensions(TM1SharpConfig tm1, string cubeName)
+        /// <summary>
+        /// Asynchronously queries the dimensions of a cube using the specified TM1SharpConfig and cube name.
+        /// </summary>
+        /// <param name="tm1">The TM1SharpConfig instance.</param>
+        /// <param name="cubeName">The name of the cube.</param>
+        /// <returns>A string representing the queried cube dimensions.</returns>
+        public async static Task<string> QueryCubeDimensionsAsync(TM1SharpConfig tm1, string cubeName)
         {
-            var clientWrapper = await PlanningAnalyticsHTTPClientWrapper.Initialize(tm1);
+            var clientWrapper = await PlanningAnalyticsHTTPClientWrapper.InitializeAsync(tm1);
 
             var response = await clientWrapper.Client.GetAsync(tm1.ServerHTTPSAddress + "/prism/harmony/tm1serverexplorer/api/v1/Servers('" + tm1.Environment + "')/Cubes('" + cubeName + "')/Dimensions");
 
@@ -38,9 +57,15 @@ namespace AndromedaTM1Sharp
             return content;
         }
 
-        public async static Task<string> QueryCubeViews(TM1SharpConfig tm1, string cubeName)
+        /// <summary>
+        /// Asynchronously queries the views of a cube using the specified TM1SharpConfig and cube name.
+        /// </summary>
+        /// <param name="tm1">The TM1SharpConfig instance.</param>
+        /// <param name="cubeName">The name of the cube.</param>
+        /// <returns>A string representing the queried cube views.</returns>
+        public async static Task<string> QueryCubeViewsAsync(TM1SharpConfig tm1, string cubeName)
         {
-            var clientWrapper = await PlanningAnalyticsHTTPClientWrapper.Initialize(tm1);
+            var clientWrapper = await PlanningAnalyticsHTTPClientWrapper.InitializeAsync(tm1);
 
             var response = await clientWrapper.Client.GetAsync(tm1.ServerHTTPSAddress + "/prism/harmony/tm1serverexplorer/api/v1/Servers('" + tm1.Environment + "')/Cubes('" + cubeName + "')/Views");
 
@@ -49,9 +74,16 @@ namespace AndromedaTM1Sharp
             return content;
         }
 
+        /// <summary>
+        /// Asynchronously queries the cell set of a view using the specified TM1SharpConfig, cube name, and view name.
+        /// </summary>
+        /// <param name="tm1">The TM1SharpConfig instance.</param>
+        /// <param name="cubeName">The name of the cube.</param>
+        /// <param name="viewName">The name of the view.</param>
+        /// <returns>A string representing the queried cell set.</returns>
         public async static Task<string> QueryViewCellSet(TM1SharpConfig tm1, string cubeName, string viewName)
         {
-            var clientWrapper = await PlanningAnalyticsHTTPClientWrapper.Initialize(tm1);
+            var clientWrapper = await PlanningAnalyticsHTTPClientWrapper.InitializeAsync(tm1);
 
             var jsonBodyObject = new
             {
