@@ -2,7 +2,12 @@
 {
     public partial class TM1RestAPI
     {
-        public async static Task<string> QueryCubeList(TM1SharpConfig tm1)
+        /// <summary>
+        /// Asynchronously queries the cube list using the specified TM1SharpConfig.
+        /// </summary>
+        /// <param name="tm1">The TM1SharpConfig instance.</param>
+        /// <returns>A string representing the queried cube list.</returns>
+        public async static Task<string> QueryCubeListAsync(TM1SharpConfig tm1)
         {
             var client = tm1.GetTM1RestClient();
 
