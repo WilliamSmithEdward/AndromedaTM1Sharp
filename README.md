@@ -1,6 +1,20 @@
-# AndromedaTM1Sharp
+﻿# AndromedaTM1Sharp
 Author: William Smith  
 E-Mail: williamsmithe@icloud.com
+
+## Version 1.0.12 Update
+Modified constructor on TM1SharpConfig class to accept parameter for ignoring SSL certificate errors (default false).
+
+```csharp
+public TM1SharpConfig(string tm1ServerURL, string userName, string password, string environment, bool ignoreSSLCertError = false)
+{
+    ServerHTTPSAddress = tm1ServerURL.TrimEnd('/');
+    UserName = userName;
+    Password = password;
+    Environment = environment;
+    IgnoreSSLCertError = ignoreSSLCertError;
+}
+```
 
 ## Reading a value from a single cube cell
 Example of reading the value of a single cell from a cube.

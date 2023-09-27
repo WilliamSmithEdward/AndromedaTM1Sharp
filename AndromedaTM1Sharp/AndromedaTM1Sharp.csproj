@@ -2,14 +2,18 @@
 
   <PropertyGroup>
 	<Deterministic>false</Deterministic>
-    <AssemblyVersion>1.0.12</AssemblyVersion>
-    <PackageVersion>1.0.12</PackageVersion>
+    <AssemblyVersion>1.0.13</AssemblyVersion>
+    <PackageVersion>1.0.13</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
-	
+
+  <ItemGroup>
+	<None Include="README.md" pack="true" PackagePath="." />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -18,7 +22,7 @@
     <Version></Version>
     <Title>TM1Sharp | API For IBM TM1 and Planning Analytics</Title>
     <Description>AndromedaTM1Sharp is a .Net API interface for IBM's TM1 and Planning Analytics with Watson OData v4 REST APIs.</Description>
-    <Copyright>William E. Smith, 2022</Copyright>
+    <Copyright>William E. Smith, 2023</Copyright>
     <Authors>WilliamSmithE</Authors>
   </PropertyGroup>
 
@@ -39,6 +43,9 @@
 
   <PropertyGroup>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageProjectUrl>https://github.com/WilliamSmithEdward/AndromedaTM1Sharp</PackageProjectUrl>
+	<PackageTags>tm1;ibm;planning;analytics;workshop;paw;rest;api</PackageTags>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
 </Project>
