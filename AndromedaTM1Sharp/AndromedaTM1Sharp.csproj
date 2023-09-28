@@ -2,8 +2,8 @@
 
   <PropertyGroup>
 	<Deterministic>false</Deterministic>
-    <AssemblyVersion>1.0.13</AssemblyVersion>
-    <PackageVersion>1.0.13</PackageVersion>
+    <AssemblyVersion>1.0.14</AssemblyVersion>
+    <PackageVersion>1.0.14</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -41,11 +41,19 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="AndromedaTM1Sharp.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
   <PropertyGroup>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageProjectUrl>https://github.com/WilliamSmithEdward/AndromedaTM1Sharp</PackageProjectUrl>
 	<PackageTags>tm1;ibm;planning;analytics;workshop;paw;rest;api</PackageTags>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<PackageIcon>AndromedaTM1Sharp.png</PackageIcon>
   </PropertyGroup>
 
 </Project>
