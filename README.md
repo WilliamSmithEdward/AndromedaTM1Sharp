@@ -176,3 +176,5 @@ var content = await TM1RestAPI.RunProcessAsync(tm1Config, "_CreateCubeProcess", 
 
 Console.WriteLine(content);
 ```
+
+Icon Designed by Freepik Company S.L. <https://support.freepik.com/>
