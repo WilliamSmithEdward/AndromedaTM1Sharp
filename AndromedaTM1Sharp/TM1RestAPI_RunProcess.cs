@@ -16,6 +16,8 @@ namespace AndromedaTM1Sharp
         {
             var client = tm1.GetTM1RestClient();
 
+            client.DefaultRequestHeaders.Add("Prefer", "wait");
+
             var jsonBody = new StringBuilder();
 
             if (parameters != null)
