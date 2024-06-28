@@ -15,7 +15,7 @@ namespace AndromedaTM1Sharp
         {
             var client = tm1.GetTM1RestClient();
             
-            var response = await client.PostAsync(tm1.ServerHTTPSAddress + "/api/v1/Cubes('" + cubeName + "')/Views('" + viewName + "')/tm1.Execute?$expand=Axes($expand=Hierarchies($select=Name),Tuples($expand=Members($select=Name))),Cells($select=Ordinal,Value)", new StringContent("", Encoding.UTF8, "application/json"));
+            var response = await client.PostAsync(tm1.ServerAddress + "/api/v1/Cubes('" + cubeName + "')/Views('" + viewName + "')/tm1.Execute?$expand=Axes($expand=Hierarchies($select=Name),Tuples($expand=Members($select=Name))),Cells($select=Ordinal,Value)", new StringContent("", Encoding.UTF8, "application/json"));
 
             var content = await response.Content.ReadAsStringAsync();
 
