@@ -17,7 +17,7 @@ namespace AndromedaTM1Sharp
         {
             var clientWrapper = await PlanningAnalyticsHTTPClientWrapper.InitializeAsync(tm1);
 
-            var response = await clientWrapper.Client.GetAsync(tm1.ServerHTTPSAddress + "/prism/harmony/tm1serverexplorer/api/v1/Servers('" + tm1.Environment + "')/ServerFolders?viewmode=architect&displayControlObjectsOnly=true&displayChores=true");
+            var response = await clientWrapper.Client.GetAsync(tm1.ServerAddress + "/prism/harmony/tm1serverexplorer/api/v1/Servers('" + tm1.Environment + "')/ServerFolders?viewmode=architect&displayControlObjectsOnly=true&displayChores=true");
 
             var content = await response.Content.ReadAsStringAsync();
 
@@ -33,7 +33,7 @@ namespace AndromedaTM1Sharp
         {
             var clientWrapper = await PlanningAnalyticsHTTPClientWrapper.InitializeAsync(tm1);
 
-            var response = await clientWrapper.Client.GetAsync(tm1.ServerHTTPSAddress + "/prism/harmony/tm1serverexplorer/api/v1/Servers('" + tm1.Environment + "')/Cubes?viewmode=architect");
+            var response = await clientWrapper.Client.GetAsync(tm1.ServerAddress + "/prism/harmony/tm1serverexplorer/api/v1/Servers('" + tm1.Environment + "')/Cubes?viewmode=architect");
 
             var content = await response.Content.ReadAsStringAsync();
 
@@ -50,7 +50,7 @@ namespace AndromedaTM1Sharp
         {
             var clientWrapper = await PlanningAnalyticsHTTPClientWrapper.InitializeAsync(tm1);
 
-            var response = await clientWrapper.Client.GetAsync(tm1.ServerHTTPSAddress + "/prism/harmony/tm1serverexplorer/api/v1/Servers('" + tm1.Environment + "')/Cubes('" + cubeName + "')/Dimensions");
+            var response = await clientWrapper.Client.GetAsync(tm1.ServerAddress + "/prism/harmony/tm1serverexplorer/api/v1/Servers('" + tm1.Environment + "')/Cubes('" + cubeName + "')/Dimensions");
 
             var content = await response.Content.ReadAsStringAsync();
 
@@ -67,7 +67,7 @@ namespace AndromedaTM1Sharp
         {
             var clientWrapper = await PlanningAnalyticsHTTPClientWrapper.InitializeAsync(tm1);
 
-            var response = await clientWrapper.Client.GetAsync(tm1.ServerHTTPSAddress + "/prism/harmony/tm1serverexplorer/api/v1/Servers('" + tm1.Environment + "')/Cubes('" + cubeName + "')/Views");
+            var response = await clientWrapper.Client.GetAsync(tm1.ServerAddress + "/prism/harmony/tm1serverexplorer/api/v1/Servers('" + tm1.Environment + "')/Cubes('" + cubeName + "')/Views");
 
             var content = await response.Content.ReadAsStringAsync();
 
@@ -98,7 +98,7 @@ namespace AndromedaTM1Sharp
 
             var jsonPayload = new StringContent(jsonBody, new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = await clientWrapper.Client.PostAsync(tm1.ServerHTTPSAddress + "/prism/harmony/gridservice/api/v1/Create", jsonPayload);
+            var response = await clientWrapper.Client.PostAsync(tm1.ServerAddress + "/prism/harmony/gridservice/api/v1/Create", jsonPayload);
 
             var content = await response.Content.ReadAsStringAsync();
 

@@ -21,7 +21,7 @@ namespace AndromedaTM1Sharp
 
             var jsonPayload = new StringContent(jsonBody.ToString(), new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = await client.PostAsync(tm1.ServerHTTPSAddress + @"/api/v1/ExecuteMDX?$expand=Axes($expand=Hierarchies($select=Name),Tuples($expand=Members($select=Name))),Cells($select=Ordinal,Value)", jsonPayload);
+            var response = await client.PostAsync(tm1.ServerAddress + @"/api/v1/ExecuteMDX?$expand=Axes($expand=Hierarchies($select=Name),Tuples($expand=Members($select=Name))),Cells($select=Ordinal,Value)", jsonPayload);
 
             var content = await response.Content.ReadAsStringAsync();
 

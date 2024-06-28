@@ -12,7 +12,7 @@ namespace AndromedaTM1Sharp
         /// <summary>
         /// Gets the TM1 server HTTPS address.
         /// </summary>
-        public string ServerHTTPSAddress { get; private set; }
+        public string ServerAddress { get; private set; }
 
         /// <summary>
         /// Gets the username for authentication.
@@ -44,14 +44,14 @@ namespace AndromedaTM1Sharp
         /// <param name="ignoreSSLCertError">A value indicating whether to ignore SSL certificate errors (default is false).</param>
         public TM1SharpConfig(string tm1ServerURL, string userName, string password, string environment, bool ignoreSSLCertError = false)
         {
-            ServerHTTPSAddress = tm1ServerURL.TrimEnd('/');
+            ServerAddress = tm1ServerURL.TrimEnd('/');
             UserName = userName;
             Password = password;
             Environment = environment;
             IgnoreSSLCertError = ignoreSSLCertError;
         }
 
-        internal HttpClient GetTM1RestClient()
+        internal HttpClient GetTM1RestClient(string acceptType = "application/json")
         {
             var provider = new CustomUtf8EncodingProvider();
             Encoding.RegisterProvider(provider);
@@ -61,7 +61,7 @@ namespace AndromedaTM1Sharp
             clientHandler.SslProtocols = SslProtocols.Tls12;
 
             var client = new HttpClient(clientHandler);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(acceptType));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes(UserName + ":" + Password)));
 
             return client;

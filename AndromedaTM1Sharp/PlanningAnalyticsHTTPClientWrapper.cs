@@ -38,7 +38,7 @@ namespace AndromedaTM1Sharp
             });
 
             //Login to TM1 environment and initialize cookies
-            await client.PostAsync(tm1.ServerHTTPSAddress + $"/login/tm1/{tm1.Environment}/form/", payload);
+            await client.PostAsync(tm1.ServerAddress + $"/login/tm1/{tm1.Environment}/form/", payload);
 
             client.DefaultRequestHeaders.Accept.Clear();
 

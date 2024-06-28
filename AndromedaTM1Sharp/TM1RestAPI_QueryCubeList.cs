@@ -11,7 +11,7 @@
         {
             var client = tm1.GetTM1RestClient();
 
-            var content = await client.GetStringAsync(tm1.ServerHTTPSAddress + "/api/v1/Cubes");
+            var content = await client.GetStringAsync(tm1.ServerAddress + "/api/v1/Cubes");
 
             return content;
         }

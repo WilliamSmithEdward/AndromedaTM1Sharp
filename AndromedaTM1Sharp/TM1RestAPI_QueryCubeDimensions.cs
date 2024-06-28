@@ -13,7 +13,7 @@ namespace AndromedaTM1Sharp
         {
             var client = tm1.GetTM1RestClient();
 
-            var response = await client.GetAsync(tm1.ServerHTTPSAddress + @"/api/v1/Cubes('" + cubeName + "')?$select=Name&$expand=Dimensions");
+            var response = await client.GetAsync(tm1.ServerAddress + @"/api/v1/Cubes('" + cubeName + "')?$select=Name&$expand=Dimensions");
 
             var content = await response.Content.ReadAsStringAsync();
 
