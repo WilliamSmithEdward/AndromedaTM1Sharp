@@ -4,7 +4,7 @@ E-Mail: williamsmithe@icloud.com
 
 ## Version 1.0.17 Update
 * Added a new method RunProcessWithPollingAsync to run a TI process and poll for completion.
-* The return from RunProcessAsync and RunProcessWithPollingAsync now return a string with the process status (ProcessExecuteStatusCode).
+* RunProcessAsync and RunProcessWithPollingAsync now return a string with the process status (ProcessExecuteStatusCode).
 
 ## Version 1.0.13 Update
 * Updated async method names to use MethodName+Async naming convention.
