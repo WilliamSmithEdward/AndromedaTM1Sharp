@@ -82,7 +82,7 @@ namespace AndromedaTM1Sharp
 
             var asyncId = ParseAsyncId(response.Headers.Where(x => x.Key.Equals("Location")).First().Value.First());
 
-            var asyncResult = await GetAsyncStatus(client, tm1.ServerAddress, asyncId, timeoutSeconds);
+            var asyncResult = await PollAsyncProcessForResult(client, tm1.ServerAddress, asyncId, timeoutSeconds);
 
             return JsonDocument.Parse(asyncResult)?.RootElement.GetProperty("ProcessExecuteStatusCode").GetString() ?? "UnknownError";
         }

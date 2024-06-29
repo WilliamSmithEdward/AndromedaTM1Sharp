@@ -24,6 +24,19 @@
         /// Initializes a new instance of the <see cref="ElementReference"/> class with the specified parameters.
         /// </summary>
         /// <param name="dimension">The dimension of the element.</param>
+        /// <param name="element">The name of the element.</param>
+        /// <para>Note: Hierarchy is set to dimension for this overload.</para>
+        public ElementReference(string dimension, string element)
+        {
+            Dimension = dimension;
+            Element = element;
+            Hierarchy = dimension;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElementReference"/> class with the specified parameters.
+        /// </summary>
+        /// <param name="dimension">The dimension of the element.</param>
         /// <param name="hierarchy">The hierarchy of the element.</param>
         /// <param name="element">The name of the element.</param>
         public ElementReference(string dimension, string hierarchy, string element)

@@ -13,14 +13,14 @@
         /// <summary>
         /// Gets or sets the value of the cell.
         /// </summary>
-        public string Value { get; set; }
+        public string? Value { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CellReference"/> class with the specified parameters.
         /// </summary>
         /// <param name="elements">The list of element references associated with the cell.</param>
         /// <param name="value">The value of the cell.</param>
-        public CellReference(List<ElementReference> elements, string value)
+        public CellReference(List<ElementReference> elements, string? value = null)
         {
             Elements = elements;
             Value = value;
