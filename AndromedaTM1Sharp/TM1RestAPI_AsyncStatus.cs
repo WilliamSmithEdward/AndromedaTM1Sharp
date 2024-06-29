@@ -4,7 +4,7 @@ namespace AndromedaTM1Sharp
 {
     public partial class TM1RestAPI
     {
-        private async static Task<string> GetAsyncStatus(HttpClient client, string baseUrl, string asyncId, int timeoutSeconds)
+        private async static Task<string> PollAsyncProcessForResult(HttpClient client, string baseUrl, string asyncId, int timeoutSeconds)
         {
             int counter = 1;
 
