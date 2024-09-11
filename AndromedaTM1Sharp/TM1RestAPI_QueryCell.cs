@@ -120,7 +120,7 @@ namespace AndromedaTM1Sharp
 
             var cellsetId = ParseCellsetId(content);
 
-            await DeleteCellsetAsync(tm1, cellsetId);
+            DeleteCellset(tm1, cellsetId);
 
             if (model?.Cells?.Count != 1) throw new ArgumentException("Expected return of 1 cell, check parameters.");
 

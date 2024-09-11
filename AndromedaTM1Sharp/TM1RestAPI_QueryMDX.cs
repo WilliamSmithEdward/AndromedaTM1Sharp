@@ -27,7 +27,7 @@ namespace AndromedaTM1Sharp
 
             var cellsetId = ParseCellsetId(content);
 
-            await DeleteCellsetAsync(tm1, cellsetId);
+            DeleteCellset(tm1, cellsetId);
 
             return content;
         }
