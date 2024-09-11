@@ -2,9 +2,24 @@
 Author: William Smith  
 E-Mail: williamsmithe@icloud.com
 
-## Version 1.0.17 Update
-* Added a new method RunProcessWithPollingAsync to run a TI process and poll for completion.
-* RunProcessAsync and RunProcessWithPollingAsync now return a string with the process status (ProcessExecuteStatusCode).
+## Version 1.0.13 Update
+* Updated async method names to use MethodName+Async naming convention.
+* Updated readme examples to use the await keyword.
+* Added XML documentation to all public classes and class members.
+
+## Version 1.0.12 Update
+* Modified constructor on TM1SharpConfig class to accept parameter for ignoring SSL certificate errors (default false).
+
+```csharp
+public TM1SharpConfig(string tm1ServerURL, string userName, string password, string environment, bool ignoreSSLCertError = false)
+{
+    ServerHTTPSAddress = tm1ServerURL.TrimEnd('/');
+    UserName = userName;
+    Password = password;
+    Environment = environment;
+    IgnoreSSLCertError = ignoreSSLCertError;
+}
+```
 
 ## Reading a value from a single cube cell
 Example of reading the value of a single cell from a cube.
