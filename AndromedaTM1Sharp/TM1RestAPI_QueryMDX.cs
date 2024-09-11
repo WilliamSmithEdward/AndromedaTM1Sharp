@@ -25,6 +25,10 @@ namespace AndromedaTM1Sharp
 
             var content = await response.Content.ReadAsStringAsync();
 
+            var cellsetId = ParseCellsetId(content);
+
+            await DeleteCellsetAsync(tm1, cellsetId);
+
             return content;
         }
     }
