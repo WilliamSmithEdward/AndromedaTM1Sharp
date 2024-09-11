@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 
 namespace AndromedaTM1Sharp
 {
@@ -14,12 +8,22 @@ namespace AndromedaTM1Sharp
         {
             JsonDocument document = JsonDocument.Parse(content);
 
-            return document.RootElement.GetProperty("ID").GetString() ?? "";
+            if (!document.RootElement.TryGetProperty("ID", out JsonElement idElement))
+            {
+                return "";
+            }
+
+            return idElement.GetString() ?? "";
         }
 
-        private static async Task DeleteCellsetAsync(TM1SharpConfig tm1, string cellsetId)
+        private static void DeleteCellset(TM1SharpConfig tm1, string cellsetId)
         {
-            await tm1.GetTM1RestClient().DeleteAsync(tm1.ServerAddress + $"/api/v1/Cellsets('{cellsetId}')");
+            if (string.IsNullOrEmpty(cellsetId))
+            {
+                return;
+            }
+
+            Task.Run(() => tm1.GetTM1RestClient().DeleteAsync(tm1.ServerAddress + $"/api/v1/Cellsets('{cellsetId}')"));
         }
     }
 }

@@ -2,8 +2,8 @@
 
   <PropertyGroup>
 	<Deterministic>false</Deterministic>
-    <AssemblyVersion>1.0.18</AssemblyVersion>
-    <PackageVersion>1.0.18</PackageVersion>
+    <AssemblyVersion>1.0.18.2</AssemblyVersion>
+    <PackageVersion>1.0.18.2</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>
