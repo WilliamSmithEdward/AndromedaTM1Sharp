@@ -104,7 +104,7 @@ namespace AndromedaTM1Sharp
 
                     int columnPosition = (x.Ordinal % cellColumns) + hierarchyColumns ?? 0;
 
-                    lock (dt) dt.Rows[rowPosisiton][columnPosition] = x.Value;
+                    lock (dt) dt.Rows[rowPosisiton][columnPosition] = x.Value ?? 0;
                 });
 
                 return dt;

@@ -81,7 +81,7 @@ namespace AndromedaTM1Sharp
         /// <param name="cubeName">The name of the cube.</param>
         /// <param name="viewName">The name of the view.</param>
         /// <returns>A string representing the queried cell set.</returns>
-        public async static Task<string> QueryViewCellSet(TM1SharpConfig tm1, string cubeName, string viewName)
+        public async static Task<string> QueryViewCellSetAsync(TM1SharpConfig tm1, string cubeName, string viewName)
         {
             var clientWrapper = await PlanningAnalyticsHTTPClientWrapper.InitializeAsync(tm1);
 
@@ -90,7 +90,7 @@ namespace AndromedaTM1Sharp
                 Server = tm1.Environment,
                 Cube = cubeName,
                 Private = false,
-                RangeStrategy = "RELOCATION",
+                RangeStrategy = "REALLOCATION",
                 View = viewName
             };
 
