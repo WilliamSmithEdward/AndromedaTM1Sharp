@@ -2,9 +2,9 @@
 Author: William Smith  
 E-Mail: williamsmithe@icloud.com
 
-## Version 1.0.17 Update
-* Added a new method RunProcessWithPollingAsync to run a TI process and poll for completion.
-* RunProcessAsync and RunProcessWithPollingAsync now return a string with the process status (ProcessExecuteStatusCode).
+## Version 1.0.18 Update
+* Increased number of dimension+element parameters to 20 for QueryCellAsync method.
+* Methods that create a cellset on the TM1 server will now send a cellset delete API call to clear the cellset from memory after the data has been read.
 
 ## Reading a value from a single cube cell
 Example of reading the value of a single cell from a cube.
