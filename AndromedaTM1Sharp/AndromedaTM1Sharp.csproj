@@ -2,8 +2,8 @@
 
   <PropertyGroup>
 	<Deterministic>false</Deterministic>
-    <AssemblyVersion>1.0.18.3</AssemblyVersion>
-    <PackageVersion>1.0.18.3</PackageVersion>
+    <AssemblyVersion>1.0.19</AssemblyVersion>
+    <PackageVersion>1.0.19</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -24,6 +24,7 @@
     <Description>AndromedaTM1Sharp is a .Net API interface for IBM's TM1 and Planning Analytics with Watson OData v4 REST APIs.</Description>
     <Copyright>William E. Smith, 2023</Copyright>
     <Authors>WilliamSmithE</Authors>
+    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
