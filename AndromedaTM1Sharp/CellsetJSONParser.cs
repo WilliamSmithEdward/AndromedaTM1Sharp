@@ -214,6 +214,7 @@ namespace AndromedaTM1Sharp
             public override object? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
                 reader.TokenType switch
                 {
+                    JsonTokenType.Null => null,
                     JsonTokenType.String => reader.GetString(),
                     JsonTokenType.Number when reader.TryGetInt32(out var i) => i,
                     JsonTokenType.Number when reader.TryGetInt64(out var l) => l,
