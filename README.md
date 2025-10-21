@@ -2,9 +2,8 @@
 Author: William Smith  
 E-Mail: williamsmithe@icloud.com
 
-## Version 1.0.18 Update
-* Increased number of dimension+element parameters to 20 for QueryCellAsync method.
-* Methods that create a cellset on the TM1 server will now send a cellset delete API call to clear the cellset from memory after the data has been read.
+## Version 1.0.19 Update
+* New Method "WriteCubeCellValuesBatchAsync": Supports writing to multiple cells in a single call. See the "Writing to a cube" example below.
 
 ## Reading a value from a single cube cell
 Example of reading the value of a single cell from a cube.
@@ -89,7 +88,8 @@ foreach (DataRow row in dt.Rows)
 ```
 
 ## Writing to a cube
-Example of writing a list of values to a cube, while iterating through one dimension and keeping other dimensions constant. 
+Example of writing a list of values to a cube, while iterating through one dimension and keeping other dimensions constant. \
+** Now supports batch writing multiple cells in a single call. Use WriteCubeCellValuesBatchAsync() **
 
 ```csharp
 using AndromedaTM1Sharp;
