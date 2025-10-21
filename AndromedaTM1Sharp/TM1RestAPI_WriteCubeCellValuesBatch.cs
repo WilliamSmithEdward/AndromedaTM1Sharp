@@ -18,7 +18,6 @@ namespace AndromedaTM1Sharp
 
             var client = tm1.GetTM1RestClient();
 
-            // Split into chunks
             var chunks = cellReferenceList
                 .Select((cell, i) => new { cell, i })
                 .GroupBy(x => x.i / chunkSize, x => x.cell);
@@ -38,7 +37,6 @@ namespace AndromedaTM1Sharp
                         );
                     }
 
-                    // use dictionary so we can name property exactly as "Tuple@odata.bind"
                     var update = new Dictionary<string, object>
                     {
                         ["Tuple@odata.bind"] = tuplePaths,
@@ -58,15 +56,11 @@ namespace AndromedaTM1Sharp
                     new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = null }
                 );
 
-                Console.WriteLine(json);
-
                 using var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 var url = $"{tm1.ServerAddress}/api/v1/Cubes('{cubeName}')/tm1.UpdateCells";
 
                 using var response = await client.PostAsync(url, content);
-
-                Console.WriteLine(response);
 
                 response.EnsureSuccessStatusCode();
             }
