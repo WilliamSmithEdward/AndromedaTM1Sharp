@@ -18,25 +18,32 @@ namespace AndromedaTM1Sharp
         /// the TM1 server has in some instances unexpectedly returned with no JSON response.
         /// It is recommended to use RunProcessWithPollingAsync if this is a concern.</para>
         /// </remarks>
-        public async static Task<string> RunProcessAsync(TM1SharpConfig tm1, string processName, Dictionary<string, string>? parameters = null)
+        public async static Task<string> RunProcessAsync(TM1SharpConfig tm1, string processName, Dictionary<string, object>? parameters = null)
         {
             var client = tm1.GetTM1RestClient();
 
-            var jsonBody = new StringBuilder();
+            object jsonBodyObj;
 
             if (parameters != null)
             {
-                jsonBody.Append("{\"Parameters\":[");
-
-                parameters.AsEnumerable().ToList().ForEach(x =>
+                jsonBodyObj = new
                 {
-                    jsonBody.Append("{\"Name\":\"" + x.Key + "\", \"Value\":\"" + x.Value + "\"}");
-                });
-
-                jsonBody.Append("]}");
+                    Parameters = parameters.Select(x => new
+                    {
+                        Name = x.Key,
+                        x.Value
+                    })
+                };
             }
 
-            var jsonPayload = new StringContent(jsonBody.ToString(), new MediaTypeWithQualityHeaderValue("application/json"));
+            else
+            {
+                jsonBodyObj = new { Parameters = Array.Empty<object>() };
+            }
+
+            var jsonText = JsonSerializer.Serialize(jsonBodyObj);
+
+            var jsonPayload = new StringContent(jsonText, Encoding.UTF8, "application/json");
 
             var response = await client.PostAsync(tm1.ServerAddress + @"/api/v1/Processes('" + processName + "')/tm1.ExecuteWithReturn", jsonPayload);
 
@@ -56,29 +63,38 @@ namespace AndromedaTM1Sharp
         /// <exception cref="HttpRequestException">Thrown when the HTTP request fails.</exception>
         /// <exception cref="JsonException">Thrown when parsing the JSON response fails.</exception>
         /// <exception cref="TimeoutException">Thrown when the request times out.</exception>
-        public async static Task<string> RunProcessWithPollingAsync(TM1SharpConfig tm1, string processName, int timeoutSeconds = 60, Dictionary<string, string>? parameters = null)
+        public async static Task<string> RunProcessWithPollingAsync(TM1SharpConfig tm1, string processName, int timeoutSeconds = 60, Dictionary<string, object>? parameters = null)
         {
             var client = tm1.GetTM1RestClient();
 
             client.DefaultRequestHeaders.Add("Prefer", "respond-async");
 
-            var jsonBody = new StringBuilder();
+            object jsonBodyObj;
 
             if (parameters != null)
             {
-                jsonBody.Append("{\"Parameters\":[");
-
-                parameters.AsEnumerable().ToList().ForEach(x =>
+                jsonBodyObj = new
                 {
-                    jsonBody.Append("{\"Name\":\"" + x.Key + "\", \"Value\":\"" + x.Value + "\"}");
-                });
-
-                jsonBody.Append("]}");
+                    Parameters = parameters.Select(x => new
+                    {
+                        Name = x.Key,
+                        x.Value
+                    })
+                };
             }
 
-            var jsonPayload = new StringContent(jsonBody.ToString(), new MediaTypeWithQualityHeaderValue("application/json"));
+            else
+            {
+                jsonBodyObj = new { Parameters = Array.Empty<object>() };
+            }
 
-            var response = await client.PostAsync(tm1.ServerAddress + @"/api/v1/Processes('" + processName + "')/tm1.ExecuteWithReturn", jsonPayload);
+            var jsonText = JsonSerializer.Serialize(jsonBodyObj);
+
+            var jsonPayload = new StringContent(jsonText, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(
+                tm1.ServerAddress + @"/api/v1/Processes('" + processName + "')/tm1.ExecuteWithReturn",
+                jsonPayload);
 
             var asyncId = ParseAsyncId(response.Headers.Where(x => x.Key.Equals("Location")).First().Value.First());
 
