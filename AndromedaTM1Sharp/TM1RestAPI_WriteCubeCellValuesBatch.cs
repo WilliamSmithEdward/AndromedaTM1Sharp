@@ -17,71 +17,60 @@ namespace AndromedaTM1Sharp
             if (cellReferenceList == null || cellReferenceList.Count == 0) return;
 
             var client = tm1.GetTM1RestClient();
-            int index = 0;
 
-            while (index < cellReferenceList.Count)
+            // Split into chunks
+            var chunks = cellReferenceList
+                .Select((cell, i) => new { cell, i })
+                .GroupBy(x => x.i / chunkSize, x => x.cell);
+
+            foreach (var chunk in chunks)
             {
-                int take = Math.Min(chunkSize, cellReferenceList.Count - index);
+                var updates = new List<object>();
 
-                var jsonBody = new StringBuilder();
-                jsonBody.Append(@"{""Updates"":[");
-
-                for (int i = 0; i < take; i++)
+                foreach (var cellReference in chunk)
                 {
-                    var cellReference = cellReferenceList[index + i];
+                    var tuplePaths = new List<string>();
 
-                    jsonBody.Append(@"{""Tuple@odata.bind"": [");
-
-                    for (int e = 0; e < cellReference.Elements.Count; e++)
+                    foreach (var element in cellReference.Elements)
                     {
-                        var y = cellReference.Elements[e];
-
-                        jsonBody.Append(@"""Dimensions('")
-                               .Append(y.Dimension)
-                               .Append(@"')/Hierarchies('")
-                               .Append(y.Hierarchy)
-                               .Append(@"')/Elements('")
-                               .Append(y.Element)
-                               .Append(@"')"",");
+                        tuplePaths.Add(
+                            $"Dimensions('{element.Dimension}')/Hierarchies('{element.Hierarchy}')/Elements('{element.Element}')"
+                        );
                     }
 
-                    if (jsonBody[^1] == ',')
-                        jsonBody.Length--;
-
-                    jsonBody.Append(@"],");
-
-                    var v = cellReference.Value?.ToString() ?? string.Empty;
-
-                    if (decimal.TryParse(v, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var num))
+                    // use dictionary so we can name property exactly as "Tuple@odata.bind"
+                    var update = new Dictionary<string, object>
                     {
-                        jsonBody.Append(@"""Value"":").Append(num.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                    }
+                        ["Tuple@odata.bind"] = tuplePaths,
+                        ["Value"] = cellReference.Value ?? 0
+                    };
 
-                    else
-                    {
-                        jsonBody.Append(@"""Value"":""")
-                                .Append(v.Replace(@"""", @"\"""))
-                                .Append('"');
-                    }
-
-                    jsonBody.Append("},");
+                    updates.Add(update);
                 }
 
-                if (jsonBody[^1] == ',')
-                    jsonBody.Length--;
+                var body = new Dictionary<string, object>
+                {
+                    ["Updates"] = updates
+                };
 
-                jsonBody.Append("]}");
+                var json = System.Text.Json.JsonSerializer.Serialize(
+                    body,
+                    new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = null }
+                );
 
-                using var content = new StringContent(jsonBody.ToString(), Encoding.UTF8, "application/json");
+                Console.WriteLine(json);
 
-                var url = tm1.ServerAddress + "/api/v1/Cubes('" + cubeName + "')/tm1.UpdateCells";
+                using var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var url = $"{tm1.ServerAddress}/api/v1/Cubes('{cubeName}')/tm1.UpdateCells";
 
                 using var response = await client.PostAsync(url, content);
 
-                response.EnsureSuccessStatusCode();
+                Console.WriteLine(response);
 
-                index += take;
+                response.EnsureSuccessStatusCode();
             }
         }
+
     }
 }
