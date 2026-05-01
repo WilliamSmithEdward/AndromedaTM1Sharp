@@ -8,6 +8,8 @@ namespace AndromedaTM1Sharp
     /// </summary>
     public class PlanningAnalyticsWorkspaceAPI
     {
+        private static readonly JsonSerializerOptions _jsonSerializerOptions = new() { WriteIndented = true };
+
         /// <summary>
         /// Asynchronously queries the object list using the specified TM1SharpConfig.
         /// </summary>
@@ -94,7 +96,7 @@ namespace AndromedaTM1Sharp
                 View = viewName
             };
 
-            var jsonBody = JsonSerializer.Serialize<object>(jsonBodyObject, new JsonSerializerOptions { WriteIndented = true, });
+            var jsonBody = JsonSerializer.Serialize<object>(jsonBodyObject, _jsonSerializerOptions);
 
             var jsonPayload = new StringContent(jsonBody, new MediaTypeWithQualityHeaderValue("application/json"));
 

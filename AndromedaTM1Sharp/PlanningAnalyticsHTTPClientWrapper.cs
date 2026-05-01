@@ -30,12 +30,12 @@ namespace AndromedaTM1Sharp
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
 
-            var payload = new FormUrlEncodedContent(new[]
-            {
+            var payload = new FormUrlEncodedContent(
+            [
                 new KeyValuePair<string, string>("mode", "basic"),
                 new KeyValuePair<string, string>("username", tm1.UserName),
                 new KeyValuePair<string, string>("password", tm1.Password)
-            });
+            ]);
 
             //Login to TM1 environment and initialize cookies
             await client.PostAsync(tm1.ServerAddress + $"/login/tm1/{tm1.Environment}/form/", payload);

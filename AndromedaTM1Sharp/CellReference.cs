@@ -3,27 +3,21 @@
     /// <summary>
     /// Represents a cell reference in TM1.
     /// </summary>
-    public class CellReference
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="CellReference"/> class with the specified parameters.
+    /// </remarks>
+    /// <param name="elements">The list of element references associated with the cell.</param>
+    /// <param name="value">The value of the cell.</param>
+    public class CellReference(List<ElementReference> elements, object? value = null)
     {
         /// <summary>
         /// Gets or sets the list of element references associated with the cell.
         /// </summary>
-        public List<ElementReference> Elements { get; private set; }
+        public List<ElementReference> Elements { get; private set; } = elements;
 
         /// <summary>
         /// Gets or sets the value of the cell.
         /// </summary>
-        public object? Value { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CellReference"/> class with the specified parameters.
-        /// </summary>
-        /// <param name="elements">The list of element references associated with the cell.</param>
-        /// <param name="value">The value of the cell.</param>
-        public CellReference(List<ElementReference> elements, object? value = null)
-        {
-            Elements = elements;
-            Value = value;
-        }
+        public object? Value { get; set; } = value;
     }
 }

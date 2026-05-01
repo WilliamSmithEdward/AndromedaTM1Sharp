@@ -1,9 +1,12 @@
 ﻿using System.Text;
+using System.Text.Json;
 
 namespace AndromedaTM1Sharp
 {
     public partial class TM1RestAPI
     {
+        private static readonly JsonSerializerOptions _writeBatchJsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = null };
+
         /// <summary>
         /// Asynchronously writes cell values in batches to a cube using the specified TM1SharpConfig, cube name, and list of cell references.
         /// </summary>
@@ -51,10 +54,7 @@ namespace AndromedaTM1Sharp
                     ["Updates"] = updates
                 };
 
-                var json = System.Text.Json.JsonSerializer.Serialize(
-                    body,
-                    new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = null }
-                );
+                var json = JsonSerializer.Serialize(body, _writeBatchJsonOptions);
 
                 using var content = new StringContent(json, Encoding.UTF8, "application/json");
 
