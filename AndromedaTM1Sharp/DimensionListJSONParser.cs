@@ -70,6 +70,12 @@ namespace AndromedaTM1Sharp
             /// </summary>
             [JsonPropertyName("Type")]
             public string? Type { get; set; }
+
+            /// <summary>
+            /// Gets or sets element attributes keyed by attribute name.
+            /// </summary>
+            [JsonPropertyName("Attributes")]
+            public Dictionary<string, object?>? Attributes { get; set; }
         }
     }
 }

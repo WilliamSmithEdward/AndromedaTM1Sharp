@@ -14,6 +14,16 @@ E-Mail: williamsmithe@icloud.com
 * Added optional ETag metadata fields to dimension members and hierarchy rollup models.
 * Improved rollup diagnostics: throws explicit exceptions on REST/OData error payloads.
 * ETag enrichment: rollup ParentETag/ChildETag are populated from members query when Edges payload omits etags.
+* Added dimension member attribute support: include all attributes (bool) or include only selected attribute names (missing names are ignored).
+* Added rollup attribute support: parent/child attributes can be enriched and returned in `ToEdges()` as `ParentAttributes` / `ChildAttributes`.
+* Verified JSON alignment against TM1 server payloads for Edges, Elements, and Attributes shapes.
+* Standardized query options pattern with `DimensionQueryOptions` for member and rollup queries.
+* Added `ParentType` / `ChildType` to `HierarchyEdge`: element type (Numeric, String, Consolidated) for each side of an edge.
+* Added `NodeRole` enum to `HierarchyEdge`: classifies each node as `Root` (consolidation with no parent), `Member` (consolidation that is also a child), `Leaf` (never a parent), or `Orphan` (no parent and no children).
+* Added `ParentLevel` / `ChildLevel` to `HierarchyEdge`: 0-based depth from the nearest root, computed via BFS across the full hierarchy.
+* `ParentRole` and `ParentLevel` are nullable — null on self-edges emitted for roots and orphans.
+* `ToEdges()` now emits a null-parent self-edge for every `Root` and `Orphan` so that every dimension member appears as `Child` on at least one edge.
+* Added `AllMembers` to `DimensionHierarchyModel`: full flat member list populated during enrichment, enabling root/orphan detection without an extra API call.
 
 ## Reading a value from a single cube cell
 Example of reading the value of a single cell from a cube.
@@ -132,6 +142,32 @@ cubeUpdateKVPList.ForEach(x =>
 await TM1RestAPI.WriteCubeCellValueAsync(tm1Config, "YourCube", cellReferenceList);
 ```
 
+## Writing to a cube in batch
+Example of writing a large number of cells in chunks using `WriteCubeCellValuesBatchAsync`. Defaults to 5000 cells per batch request.
+
+```csharp
+using AndromedaTM1Sharp;
+
+var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserName", "tm1Password", "YourEnvName");
+
+var cellReferenceList = new List<CellReference>();
+
+// Build as many cell references as needed
+cellReferenceList.Add(
+    new CellReference(new List<ElementReference>()
+    {
+        new ElementReference("REGION", "REGION", "Massachusets"),
+        new ElementReference("MONTH", "MONTH", "9208"),
+        new ElementReference("PROJECT", "PROJECT", "PROJECT NAME")
+    }, "42"
+));
+
+await TM1RestAPI.WriteCubeCellValuesBatchAsync(tm1Config, "YourCube", cellReferenceList);
+
+// Custom chunk size
+await TM1RestAPI.WriteCubeCellValuesBatchAsync(tm1Config, "YourCube", cellReferenceList, chunkSize: 1000);
+```
+
 ## Querying a list of cubes
 Example of reading a list of cubes from the TM1 server.
 
@@ -174,6 +210,36 @@ model?.Value?.ForEach(x =>
 });
 ```
 
+Example with all attributes included.
+
+```csharp
+using AndromedaTM1Sharp;
+
+var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserName", "tm1Password", "YourEnvName");
+
+var model = await TM1RestAPI.QueryDimensionMembersAsync(tm1Config, "YourDimension", includeAttributes: true);
+
+model?.Value?.ForEach(x =>
+{
+    Console.WriteLine($"{x?.Name}: {string.Join(", ", x?.Attributes?.Select(a => $"{a.Key}={a.Value}") ?? [])}");
+});
+```
+
+Example with selected attribute names only (missing names are ignored).
+
+```csharp
+using AndromedaTM1Sharp;
+
+var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserName", "tm1Password", "YourEnvName");
+
+var model = await TM1RestAPI.QueryDimensionMembersAsync(tm1Config, "YourDimension", ["Caption", "Active"]);
+
+model?.Value?.ForEach(x =>
+{
+    Console.WriteLine($"{x?.Name}: {string.Join(", ", x?.Attributes?.Select(a => $"{a.Key}={a.Value}") ?? [])}");
+});
+```
+
 ## Querying dimension hierarchy rollups
 Example of querying parent/child relationships and rollup weights.
 
@@ -191,6 +257,74 @@ edges.ForEach(edge =>
     Console.WriteLine($"{edge.Parent} -> {edge.Child} (Weight: {edge.Weight})");
 });
 ```
+
+Example with all parent/child attributes included on edges.
+
+```csharp
+using AndromedaTM1Sharp;
+
+var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserName", "tm1Password", "YourEnvName");
+
+var model = await TM1RestAPI.QueryDimensionHierarchyRollupAsync(tm1Config, "YourDimension", includeAttributes: true);
+
+var edges = model?.ToEdges() ?? [];
+
+edges.ForEach(edge =>
+{
+    var parentCaption = edge.ParentAttributes is not null && edge.ParentAttributes.TryGetValue("Caption", out var p) ? p : null;
+    var childCaption = edge.ChildAttributes is not null && edge.ChildAttributes.TryGetValue("Caption", out var c) ? c : null;
+
+    Console.WriteLine($"{edge.Parent} [{parentCaption}] -> {edge.Child} [{childCaption}] (Weight: {edge.Weight})");
+});
+```
+
+Example with selected attribute names only (missing names are ignored).
+
+```csharp
+using AndromedaTM1Sharp;
+
+var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserName", "tm1Password", "YourEnvName");
+
+var model = await TM1RestAPI.QueryDimensionHierarchyRollupAsync(
+    tm1Config,
+    "YourDimension",
+    ["Caption", "Active", "ProjName"]);
+
+var edges = model?.ToEdges() ?? [];
+
+edges.ForEach(edge =>
+{
+    Console.WriteLine($"{edge.Parent} -> {edge.Child} | ParentAttrs: {edge.ParentAttributes?.Count ?? 0}, ChildAttrs: {edge.ChildAttributes?.Count ?? 0}");
+});
+```
+
+Example using node role, type, and level to understand hierarchy structure.
+Roots and orphans appear as null-parent self-edges so every member is reachable as `Child`.
+
+```csharp
+using AndromedaTM1Sharp;
+
+var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserName", "tm1Password", "YourEnvName");
+
+var model = await TM1RestAPI.QueryDimensionHierarchyRollupAsync(tm1Config, "YourDimension");
+
+var edges = model?.ToEdges() ?? [];
+
+edges.ForEach(edge =>
+{
+    var parentLabel = edge.Parent is null ? "[none]" : $"[{edge.ParentRole} L{edge.ParentLevel}] {edge.Parent}";
+    Console.WriteLine($"{parentLabel} -> [{edge.ChildRole} L{edge.ChildLevel}] {edge.Child} ({edge.ChildType})");
+});
+```
+
+`NodeRole` values:
+- `Root` — a consolidation that has no parent in the hierarchy (top-level); appears as both a parent in normal edges and as `Child` on a null-parent self-edge
+- `Member` — a consolidation that is also a child of another consolidation (mid-level)
+- `Leaf` — an element that is never a parent (bottom-level)
+- `Orphan` — no parent and no children; appears only as `Child` on a null-parent self-edge
+
+`ParentRole` and `ParentLevel` are nullable — they are `null` on self-edges emitted for roots and orphans.  
+`ParentLevel` / `ChildLevel` are 0-based depths from the nearest root, computed via BFS.
 
 ## Running a Turbo Integrator process
 Example of running a TI process on the TM1 server. Expected return payload is:  
