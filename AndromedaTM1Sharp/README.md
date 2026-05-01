@@ -9,6 +9,11 @@ E-Mail: williamsmithe@icloud.com
 * New Method "QueryDimensionHierarchyRollupJsonAsync": Query parent/child rollup structure and weights as raw JSON.
 * New Method "QueryDimensionHierarchyRollupAsync": Query parent/child rollup structure and weights as a typed model.
 * New Parser "DimensionHierarchyJSONParser": Converts hierarchy rollup JSON into a DimensionHierarchyModel.
+* New Helper "ToEdges()": Flattens hierarchy rollups into Parent/Child/Weight rows.
+* Improved rollup handling: Supports both TM1 "Edges" and "Elements/Components" payload shapes.
+* Added optional ETag metadata fields to dimension members and hierarchy rollup models.
+* Improved rollup diagnostics: throws explicit exceptions on REST/OData error payloads.
+* ETag enrichment: rollup ParentETag/ChildETag are populated from members query when Edges payload omits etags.
 
 ## Reading a value from a single cube cell
 Example of reading the value of a single cell from a cube.
@@ -104,7 +109,7 @@ var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserNam
 var cubeUpdateKVPList = new List<KeyValuePair<string, string>>()
 {
     new KeyValuePair<string, string>("9208", "value1"),
-    new KeyValuePair<string, string>("9209", "value2"),
+    new KeyValuePair<string, "string>("9209", "value2"),
     new KeyValuePair<string, string>("9210", "value3"),
     new KeyValuePair<string, string>("9211", "value4"),
     new KeyValuePair<string, string>("9212", "value5")
@@ -179,17 +184,12 @@ var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserNam
 
 var model = await TM1RestAPI.QueryDimensionHierarchyRollupAsync(tm1Config, "YourDimension");
 
-model?.Value?
-    .Where(x => x?.Components?.Count > 0)
-    .ToList()
-    .ForEach(parent =>
-    {
-        parent?.Components?.ForEach(child =>
-        {
-            var childName = child?.Name ?? child?.Component?.Name;
-            Console.WriteLine($"{parent?.Name} -> {childName} (Weight: {child?.Weight})");
-        });
-    });
+var edges = model?.ToEdges() ?? [];
+
+edges.ForEach(edge =>
+{
+    Console.WriteLine($"{edge.Parent} -> {edge.Child} (Weight: {edge.Weight})");
+});
 ```
 
 ## Running a Turbo Integrator process

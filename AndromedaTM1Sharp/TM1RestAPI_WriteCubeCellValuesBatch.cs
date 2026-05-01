@@ -5,7 +5,7 @@ namespace AndromedaTM1Sharp
 {
     public partial class TM1RestAPI
     {
-        private static readonly JsonSerializerOptions _writeBatchJsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = null };
+        private static readonly JsonSerializerOptions _writeBatchJsonOptions = new() { PropertyNamingPolicy = null };
 
         /// <summary>
         /// Asynchronously writes cell values in batches to a cube using the specified TM1SharpConfig, cube name, and list of cell references.
