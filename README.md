@@ -2,28 +2,8 @@
 Author: William Smith  
 E-Mail: williamsmithe@icloud.com
 
-## Version 1.1.0 Update
-* New Method "QueryDimensionMembersJsonAsync": Query members (elements) of a dimension hierarchy as raw JSON.
-* New Method "QueryDimensionMembersAsync": Query members (elements) of a dimension hierarchy as a typed dimension list model.
-* New Parser "DimensionListJSONParser": Converts dimension members JSON into a DimensionListModel.
-* New Method "QueryDimensionHierarchyRollupJsonAsync": Query parent/child rollup structure and weights as raw JSON.
-* New Method "QueryDimensionHierarchyRollupAsync": Query parent/child rollup structure and weights as a typed model.
-* New Parser "DimensionHierarchyJSONParser": Converts hierarchy rollup JSON into a DimensionHierarchyModel.
-* New Helper "ToEdges()": Flattens hierarchy rollups into Parent/Child/Weight rows.
-* Improved rollup handling: Supports both TM1 "Edges" and "Elements/Components" payload shapes.
-* Added optional ETag metadata fields to dimension members and hierarchy rollup models.
-* Improved rollup diagnostics: throws explicit exceptions on REST/OData error payloads.
-* ETag enrichment: rollup ParentETag/ChildETag are populated from members query when Edges payload omits etags.
-* Added dimension member attribute support: include all attributes (bool) or include only selected attribute names (missing names are ignored).
-* Added rollup attribute support: parent/child attributes can be enriched and returned in `ToEdges()` as `ParentAttributes` / `ChildAttributes`.
-* Verified JSON alignment against TM1 server payloads for Edges, Elements, and Attributes shapes.
-* Standardized query options pattern with `DimensionQueryOptions` for member and rollup queries.
-* Added `ParentType` / `ChildType` to `HierarchyEdge`: element type (Numeric, String, Consolidated) for each side of an edge.
-* Added `NodeRole` enum to `HierarchyEdge`: classifies each node as `Root` (consolidation with no parent), `Member` (consolidation that is also a child), `Leaf` (never a parent), or `Orphan` (no parent and no children).
-* Added `ParentLevel` / `ChildLevel` to `HierarchyEdge`: 0-based depth from the nearest root, computed via BFS across the full hierarchy.
-* `ParentRole` and `ParentLevel` are nullable — null on self-edges emitted for roots and orphans.
-* `ToEdges()` now emits a null-parent self-edge for every `Root` and `Orphan` so that every dimension member appears as `Child` on at least one edge.
-* Added `AllMembers` to `DimensionHierarchyModel`: full flat member list populated during enrichment, enabling root/orphan detection without an extra API call.
+## Version 1.1.1 Update
+* Update batching behavior in `WriteCubeCellValuesBatchAsync`
 
 ## Reading a value from a single cube cell
 Example of reading the value of a single cell from a cube.
