@@ -13,17 +13,29 @@ namespace AndromedaTM1Sharp
         /// <param name="tm1">The TM1SharpConfig instance.</param>
         /// <param name="cubeName">The name of the cube.</param>
         /// <param name="cellReferenceList">A list of CellReference objects specifying cell locations and values.</param>
+        /// <param name="useChunks">If true, splits the cell references into chunks; if false, sends all in a single batch (default is false).</param>
         /// <param name="chunkSize">The number of cell updates to send in each batch (default is 5000).</param>
         /// <returns>Task representing the asynchronous operation.</returns>
-        public async static Task WriteCubeCellValuesBatchAsync(TM1SharpConfig tm1, string cubeName, List<CellReference> cellReferenceList, int chunkSize = 5000)
+        public async static Task WriteCubeCellValuesBatchAsync(TM1SharpConfig tm1, string cubeName, List<CellReference> cellReferenceList, bool useChunks = false, int chunkSize = 5000)
         {
             if (cellReferenceList == null || cellReferenceList.Count == 0) return;
 
             var client = tm1.GetTM1RestClient();
 
-            var chunks = cellReferenceList
-                .Select((cell, i) => new { cell, i })
-                .GroupBy(x => x.i / chunkSize, x => x.cell);
+            List<List<CellReference>> chunks;
+
+            if (useChunks)
+            {
+                chunks = [.. cellReferenceList
+                    .Select((cell, i) => new { cell, i })
+                    .GroupBy(x => x.i / chunkSize, x => x.cell)
+                    .Select(g => g.ToList())];
+            }
+
+            else
+            {
+                chunks = [cellReferenceList];
+            }
 
             foreach (var chunk in chunks)
             {
