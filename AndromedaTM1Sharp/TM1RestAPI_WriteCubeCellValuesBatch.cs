@@ -28,6 +28,7 @@ namespace AndromedaTM1Sharp
             {
                 chunks = cellReferenceList.Chunk(chunkSize);
             }
+
             else
             {
                 chunks = [cellReferenceList];
