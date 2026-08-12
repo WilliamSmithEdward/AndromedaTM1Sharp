@@ -22,16 +22,12 @@ namespace AndromedaTM1Sharp
 
             var client = tm1.GetTM1RestClient();
 
-            List<List<CellReference>> chunks;
+            IEnumerable<IEnumerable<CellReference>> chunks;
 
             if (useChunks)
             {
-                chunks = [.. cellReferenceList
-                    .Select((cell, i) => new { cell, i })
-                    .GroupBy(x => x.i / chunkSize, x => x.cell)
-                    .Select(g => g.ToList())];
+                chunks = cellReferenceList.Chunk(chunkSize);
             }
-
             else
             {
                 chunks = [cellReferenceList];
