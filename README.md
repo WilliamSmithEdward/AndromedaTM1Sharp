@@ -3,7 +3,7 @@ Author: William Smith
 E-Mail: williamsmithe@icloud.com
 
 ## Version 1.1.1 Update
-* Update batching behavior in `WriteCubeCellValuesBatchAsync`
+* Update chunking behavior in `WriteCubeCellValuesBatchAsync`
 
 ## Reading a value from a single cube cell
 Example of reading the value of a single cell from a cube.
