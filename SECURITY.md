@@ -128,9 +128,9 @@ SDK. ClamAV's signatures change too often to pin, so freshclam fetches and
 verifies them on every run.
 
 Dependabot proposes updates to the GitHub Actions, the Semgrep and ClamAV
-images, the hash-locked files in `.github/requirements` and the NuGet
-packages once a version is a week old, and at once for a security
-advisory. `global.json` is moved by hand. The Update YARA rules workflow
+images, the hash-locked files in `.github/requirements`, the NuGet packages
+and the .NET SDK in `global.json` once a version is a week old, and at once
+for a security advisory. The Update YARA rules workflow
 proposes new YARA pins in `.github/security/yara.json` each week. A minor
 or patch update, and the YARA pull request, merges itself once CI,
 Security and Malware scan pass; a third-party major version waits for
