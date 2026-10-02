@@ -1,4 +1,7 @@
 # AndromedaTM1Sharp
+
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/WilliamSmithEdward/AndromedaTM1Sharp/badge)](https://scorecard.dev/viewer/?uri=github.com/WilliamSmithEdward/AndromedaTM1Sharp)
+
 Author: William Smith  
 E-Mail: williamsmithe@icloud.com
 
