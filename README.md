@@ -1,6 +1,12 @@
 # AndromedaTM1Sharp
 
+[![NuGet version](https://img.shields.io/nuget/v/AndromedaTM1Sharp)](https://www.nuget.org/packages/AndromedaTM1Sharp)
+[![Downloads](https://img.shields.io/nuget/dt/AndromedaTM1Sharp)](https://www.nuget.org/packages/AndromedaTM1Sharp)
+[![CI](https://github.com/WilliamSmithEdward/AndromedaTM1Sharp/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/WilliamSmithEdward/AndromedaTM1Sharp/actions/workflows/ci.yml)
+[![Security](https://github.com/WilliamSmithEdward/AndromedaTM1Sharp/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/WilliamSmithEdward/AndromedaTM1Sharp/actions/workflows/security.yml)
+[![Malware scan](https://github.com/WilliamSmithEdward/AndromedaTM1Sharp/actions/workflows/malware-scan.yml/badge.svg?branch=main)](https://github.com/WilliamSmithEdward/AndromedaTM1Sharp/actions/workflows/malware-scan.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/WilliamSmithEdward/AndromedaTM1Sharp/badge)](https://scorecard.dev/viewer/?uri=github.com/WilliamSmithEdward/AndromedaTM1Sharp)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/WilliamSmithEdward/AndromedaTM1Sharp/blob/main/LICENSE)
 
 Author: William Smith  
 E-Mail: williamsmithe@icloud.com
