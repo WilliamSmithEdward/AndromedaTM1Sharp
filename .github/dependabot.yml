@@ -1,0 +1,51 @@
+# Dependabot keeps the pinned tools current: the workflows' actions, each
+# pinned to a commit with its release named in a comment, the scanner images,
+# each pinned by digest in a one-line Dockerfile, and the NuGet packages in
+# packages.lock.json. The YARA-X engine and the YARA Forge rules are release
+# downloads Dependabot cannot follow; update-yara-rules.yml proposes those.
+#
+# A release waits a week before it is proposed, long enough for most
+# hijacked or broken releases to be found and pulled first. Security
+# updates do not wait.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: ci
+    groups:
+      minor-and-patch:
+        patterns: ["*"]
+        update-types: [minor, patch]
+
+  - package-ecosystem: docker
+    directories:
+      - /.github/security/semgrep
+      - /.github/security/clamav
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: ci
+    groups:
+      minor-and-patch:
+        patterns: ["*"]
+        update-types: [minor, patch]
+
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: chore
+    groups:
+      minor-and-patch:
+        patterns: ["*"]
+        update-types: [minor, patch]
