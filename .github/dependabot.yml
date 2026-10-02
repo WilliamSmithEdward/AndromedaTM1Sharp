@@ -65,3 +65,17 @@ updates:
       minor-and-patch:
         patterns: ["*"]
         update-types: [minor, patch]
+
+  # The SDK pinned in global.json.
+  - package-ecosystem: dotnet-sdk
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: chore
+    groups:
+      minor-and-patch:
+        patterns: ["*"]
+        update-types: [minor, patch]
