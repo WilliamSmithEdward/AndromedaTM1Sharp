@@ -25,6 +25,7 @@
     <Copyright>William E. Smith, 2023</Copyright>
     <Authors>WilliamSmithE</Authors>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
   <ItemGroup>
