@@ -11,8 +11,8 @@
 Author: William Smith  
 E-Mail: williamsmithe@icloud.com
 
-## Version 1.1.1.1 Update
-* Chunking in `WriteCubeCellValuesBatchAsync` is now opt-in. By default every cell goes in one request; pass `useChunks: true` to split the cells into requests of `chunkSize` cells (default 5000).
+## Version 1.1.1.2 Update
+* No change to the library's behaviour. The examples below all compile, more of the API is documented, and the package is now built, scanned and published from CI with signed build provenance. See [CHANGELOG.md](https://github.com/WilliamSmithEdward/AndromedaTM1Sharp/blob/main/CHANGELOG.md).
 
 ## Configuring the connection
 `TM1SharpConfig` holds the connection details every call takes:
