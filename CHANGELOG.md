@@ -8,6 +8,12 @@ The sections up to 1.1.1.1 were gathered from the README's "Version X
 Update" notes and the nuget.org version history, with the date nuget.org
 records for each upload. A version neither describes says so.
 
+## [1.1.1.2] - 2026-10-01
+
+* No change to the library's behaviour.
+* The README's examples all compile now, and it documents the Planning Analytics Workspace API, `RunProcessWithPollingAsync`, the raw-JSON queries and `hierarchyName`. Several XML doc comments are corrected.
+* The package is built in CI from the tagged commit, scanned for vulnerabilities and malware, and published through nuget.org trusted publishing. The GitHub release carries the package's signed build provenance, which `gh attestation verify` checks against the release's copy.
+
 ## [1.1.1.1] - 2026-08-12
 
 * Chunking in `WriteCubeCellValuesBatchAsync` is now opt-in. By default every cell goes in one request; pass `useChunks: true` to split the cells into requests of `chunkSize` cells (default 5000).
