@@ -52,7 +52,7 @@
   <PropertyGroup>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageProjectUrl>https://github.com/WilliamSmithEdward/AndromedaTM1Sharp</PackageProjectUrl>
-	<PackageTags>tm1;ibm;planning;analytics;workshop;paw;rest;api</PackageTags>
+	<PackageTags>tm1;ibm;planning;analytics;workspace;paw;rest;api</PackageTags>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<PackageIcon>AndromedaTM1Sharp.png</PackageIcon>
   </PropertyGroup>

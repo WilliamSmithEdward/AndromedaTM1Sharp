@@ -11,7 +11,7 @@
     public class CellReference(List<ElementReference> elements, object? value = null)
     {
         /// <summary>
-        /// Gets or sets the list of element references associated with the cell.
+        /// Gets the list of element references associated with the cell.
         /// </summary>
         public List<ElementReference> Elements { get; private set; } = elements;
 
