@@ -12,7 +12,7 @@ namespace AndromedaTM1Sharp
         /// <param name="tm1">The TM1SharpConfig instance.</param>
         /// <param name="processName">The name of the TM1 process.</param>
         /// <param name="parameters">A dictionary of parameters for the TM1 process (optional).</param>
-        /// <returns>A string representing the result of running the TM1 process.</returns>
+        /// <returns>The ProcessExecuteStatusCode value from the server's response, such as CompletedSuccessfully.</returns>
         /// <remarks>
         /// <para><c>Warning:</c> In testing, when launching long running Turbo Integrator processes,
         /// the TM1 server has in some instances unexpectedly returned with no JSON response.

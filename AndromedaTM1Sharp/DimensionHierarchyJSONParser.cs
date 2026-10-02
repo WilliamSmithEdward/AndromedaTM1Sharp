@@ -4,7 +4,8 @@ using System.Text.Json.Serialization;
 namespace AndromedaTM1Sharp
 {
     /// <summary>
-    /// Parses JSON data from a dimension hierarchy rollup query into a DimensionHierarchyModel object.
+    /// Parses hierarchy Elements JSON with expanded Components (parent elements and their weighted children)
+    /// into a DimensionHierarchyModel object. It does not parse the /Edges payload.
     /// </summary>
     public class DimensionHierarchyJSONParser
     {

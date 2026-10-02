@@ -13,7 +13,7 @@ namespace AndromedaTM1Sharp
     /// <param name="tm1ServerURL">The TM1 server URL.</param>
     /// <param name="userName">The username for authentication.</param>
     /// <param name="password">The password for authentication.</param>
-    /// <param name="environment">The environment information.</param>
+    /// <param name="environment">The TM1 server (environment) name, used only by <see cref="PlanningAnalyticsWorkspaceAPI"/>.</param>
     /// <param name="ignoreSSLCertError">A value indicating whether to ignore SSL certificate errors (default is false).</param>
     public class TM1SharpConfig(string tm1ServerURL, string userName, string password, string environment, bool ignoreSSLCertError = false)
     {
@@ -33,7 +33,7 @@ namespace AndromedaTM1Sharp
         public string Password { get; private set; } = password;
 
         /// <summary>
-        /// Gets the environment information.
+        /// Gets the TM1 server (environment) name, used only by <see cref="PlanningAnalyticsWorkspaceAPI"/>.
         /// </summary>
         public string Environment { get; private set; } = environment;
 

@@ -2,8 +2,22 @@
 Author: William Smith  
 E-Mail: williamsmithe@icloud.com
 
-## Version 1.1.1 Update
-* Update chunking behavior in `WriteCubeCellValuesBatchAsync`
+## Version 1.1.1.1 Update
+* Chunking in `WriteCubeCellValuesBatchAsync` is now opt-in. By default every cell goes in one request; pass `useChunks: true` to split the cells into requests of `chunkSize` cells (default 5000).
+
+## Configuring the connection
+`TM1SharpConfig` holds the connection details every call takes:
+
+```csharp
+new TM1SharpConfig(tm1ServerURL, userName, password, environment, ignoreSSLCertError: false)
+```
+
+* `tm1ServerURL`: the server's address; a trailing `/` is removed.
+* `userName` and `password`: sent with every TM1 REST API request as HTTP Basic authentication.
+* `environment`: the TM1 server (environment) name. Only `PlanningAnalyticsWorkspaceAPI` uses it; the `TM1RestAPI` calls ignore it.
+* `ignoreSSLCertError` (optional, default `false`): when `true`, the client accepts any server certificate, including an invalid or self-signed one. This removes the protection TLS gives the credentials, so use it only against a test server you trust.
+
+Connections use TLS 1.2.
 
 ## Reading a value from a single cube cell
 Example of reading the value of a single cell from a cube.
@@ -20,12 +34,12 @@ List<string> lookupValues = new List<string>()
     "Lookup_Value_03"
 };
 
-lookupValues.ForEach(async x =>
+foreach (var x in lookupValues)
 {
     var result = await TM1RestAPI.QueryCellAsync(tm1Config, "Cube_Name", "Dimension_01", x, "Dimension_02", "Element_02");
 
     Console.WriteLine(result);
-});
+}
 ```
 
 ## Reading from an MDX query
@@ -60,7 +74,7 @@ Console.WriteLine(content);
 
 ## Converting cellset JSON to System.Data.DataTable
 Example of deserializing and converting the JSON return from a View / MDX query to a DataTable.  
-Currently supports multiple hierarchy levels on rows.
+Rows may hold several hierarchies; columns support one hierarchy.
 
 ```csharp
 using AndromedaTM1Sharp;
@@ -99,7 +113,7 @@ var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserNam
 var cubeUpdateKVPList = new List<KeyValuePair<string, string>>()
 {
     new KeyValuePair<string, string>("9208", "value1"),
-    new KeyValuePair<string, "string>("9209", "value2"),
+    new KeyValuePair<string, string>("9209", "value2"),
     new KeyValuePair<string, string>("9210", "value3"),
     new KeyValuePair<string, string>("9211", "value4"),
     new KeyValuePair<string, string>("9212", "value5")
@@ -123,7 +137,7 @@ await TM1RestAPI.WriteCubeCellValueAsync(tm1Config, "YourCube", cellReferenceLis
 ```
 
 ## Writing to a cube in batch
-Example of writing a large number of cells in chunks using `WriteCubeCellValuesBatchAsync`. Defaults to 5000 cells per batch request.
+Example of writing a large number of cells using `WriteCubeCellValuesBatchAsync`. By default every cell goes in one request. Chunking is opt-in: pass `useChunks: true` to send the cells in requests of `chunkSize` cells (default 5000).
 
 ```csharp
 using AndromedaTM1Sharp;
@@ -142,10 +156,14 @@ cellReferenceList.Add(
     }, "42"
 ));
 
+// All cells in one request
 await TM1RestAPI.WriteCubeCellValuesBatchAsync(tm1Config, "YourCube", cellReferenceList);
 
+// Chunks of the default 5000 cells
+await TM1RestAPI.WriteCubeCellValuesBatchAsync(tm1Config, "YourCube", cellReferenceList, useChunks: true);
+
 // Custom chunk size
-await TM1RestAPI.WriteCubeCellValuesBatchAsync(tm1Config, "YourCube", cellReferenceList, chunkSize: 1000);
+await TM1RestAPI.WriteCubeCellValuesBatchAsync(tm1Config, "YourCube", cellReferenceList, useChunks: true, chunkSize: 1000);
 ```
 
 ## Querying a list of cubes
@@ -182,7 +200,7 @@ using AndromedaTM1Sharp;
 
 var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserName", "tm1Password", "YourEnvName");
 
-var model = await TM1RestAPI.QueryDimensionMembersAsync(tm1Config, "YourDimension");
+var model = await TM1RestAPI.QueryDimensionMembersAsync(tm1Config, "YourDimension", includeAttributes: false);
 
 model?.Value?.ForEach(x =>
 {
@@ -306,15 +324,75 @@ edges.ForEach(edge =>
 `ParentRole` and `ParentLevel` are nullable — they are `null` on self-edges emitted for roots and orphans.  
 `ParentLevel` / `ChildLevel` are 0-based depths from the nearest root, computed via BFS.
 
+## Dimension queries: hierarchy, options and raw JSON
+Every dimension member and rollup query takes an optional last argument, `hierarchyName`. When it is omitted or blank, the hierarchy with the same name as the dimension is used.
+
+```csharp
+var model = await TM1RestAPI.QueryDimensionMembersAsync(tm1Config, "YourDimension", includeAttributes: false, hierarchyName: "YourAlternateHierarchy");
+```
+
+Each query also has an overload that takes a `DimensionQueryOptions`. `IncludeAttributes` includes all attributes; `AttributeNames` includes only the named ones (missing names are ignored), and setting it includes attributes even when `IncludeAttributes` is `false`.
+
+```csharp
+var options = new DimensionQueryOptions { AttributeNames = ["Caption"] };
+
+var members = await TM1RestAPI.QueryDimensionMembersAsync(tm1Config, "YourDimension", options);
+
+var rollup = await TM1RestAPI.QueryDimensionHierarchyRollupAsync(tm1Config, "YourDimension", options);
+```
+
+To get the server's JSON as a string instead of a parsed model, use the `Json` variants:
+
+* `QueryDimensionMembersJsonAsync`, with the same overloads as `QueryDimensionMembersAsync`: the hierarchy's elements (`Name`, `Type`, and `Attributes` when requested). With `AttributeNames` set, the JSON is re-serialized with only those attributes.
+* `QueryDimensionHierarchyRollupJsonAsync`: the hierarchy's `/Edges` response where the server supports it; otherwise the elements with their components and weights. It throws `InvalidOperationException` when both requests fail. It takes only `dimensionName` and `hierarchyName`.
+
+```csharp
+var json = await TM1RestAPI.QueryDimensionMembersJsonAsync(tm1Config, "YourDimension", includeAttributes: true);
+
+Console.WriteLine(json);
+```
+
 ## Running a Turbo Integrator process
-Example of running a TI process on the TM1 server. Expected return payload is:  
-{"@odata.context":"../$metadata#ibm.tm1.api.v1.ProcessExecuteResult","ProcessExecuteStatusCode":"CompletedSuccessfully"}
+Example of running a TI process on the TM1 server. `RunProcessAsync` returns the `ProcessExecuteStatusCode` value from the server's response, such as `CompletedSuccessfully`, not the whole JSON payload.
 
 ```csharp
 using AndromedaTM1Sharp;
 
 var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserName", "tm1Password", "YourEnvName");
 
-var content = await TM1RestAPI.RunProcessAsync(tm1Config, "_CreateCubeProcess", new Dictionary<string, string>() { { "CubeName", "_NewCubeCreatedbyRestAPI" } });
+var status = await TM1RestAPI.RunProcessAsync(tm1Config, "_CreateCubeProcess", new Dictionary<string, object>() { { "CubeName", "_NewCubeCreatedbyRestAPI" } });
+
+Console.WriteLine(status);
+```
+
+## Running a Turbo Integrator process with polling
+`RunProcessWithPollingAsync` asks the server to run the process asynchronously, then checks for the result once a second until it arrives or `timeoutSeconds` (default 60) checks have been made, when it throws a `TimeoutException`. Like `RunProcessAsync`, it returns the `ProcessExecuteStatusCode` value. Use it for long-running processes: in testing, the server has sometimes returned no JSON to `RunProcessAsync` for those.
+
+```csharp
+using AndromedaTM1Sharp;
+
+var tm1Config = new TM1SharpConfig("https://YourTM1Server:YourPort", "tm1UserName", "tm1Password", "YourEnvName");
+
+var status = await TM1RestAPI.RunProcessWithPollingAsync(tm1Config, "_LongRunningProcess", timeoutSeconds: 300, parameters: new Dictionary<string, object>() { { "Year", "2024" } });
+
+Console.WriteLine(status);
+```
+
+## Planning Analytics Workspace API
+`PlanningAnalyticsWorkspaceAPI` calls the Planning Analytics Workspace (PAW) services rather than the TM1 REST API. Each call first logs in through the PAW form login with the configured user name and password, then returns the raw JSON response as a string. `ServerAddress` here is the PAW address, and `environment` names the TM1 server to use.
+
+* `QueryObjectListAsync(tm1Config)`: the server's folders, with control objects and chores.
+* `QueryCubeListAsync(tm1Config)`: the server's cubes.
+* `QueryCubeDimensionsAsync(tm1Config, "YourCube")`: a cube's dimensions.
+* `QueryCubeViewsAsync(tm1Config, "YourCube")`: a cube's views.
+* `QueryViewCellSetAsync(tm1Config, "YourCube", "YourView")`: creates a grid for a view and returns its cell set.
+
+```csharp
+using AndromedaTM1Sharp;
+
+var pawConfig = new TM1SharpConfig("https://YourPAWServer", "pawUserName", "pawPassword", "YourEnvName");
+
+var content = await PlanningAnalyticsWorkspaceAPI.QueryCubeListAsync(pawConfig);
 
 Console.WriteLine(content);
+```

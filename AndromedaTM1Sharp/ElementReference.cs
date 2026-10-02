@@ -25,7 +25,9 @@
         /// </summary>
         /// <param name="dimension">The dimension of the element.</param>
         /// <param name="element">The name of the element.</param>
+        /// <remarks>
         /// <para>Note: Hierarchy is set to dimension for this overload.</para>
+        /// </remarks>
         public ElementReference(string dimension, string element)
         {
             Dimension = dimension;
