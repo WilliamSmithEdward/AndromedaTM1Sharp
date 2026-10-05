@@ -48,6 +48,8 @@ jobs:
         run: |
           set -- dist/*.nupkg
           [ "$#" -eq 1 ] && [ -f "$1" ] || { echo "want exactly one .nupkg, found: $*"; exit 1; }
+          unzip -p "$1" README.md > packaged-readme.md
+          cmp README.md packaged-readme.md
           unzip -Z1 "$1" > contents.txt
           cat contents.txt
           for want in lib/net10.0/AndromedaTM1Sharp.dll lib/net10.0/AndromedaTM1Sharp.xml README.md AndromedaTM1Sharp.png; do
