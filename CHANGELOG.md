@@ -8,6 +8,12 @@ The sections up to 1.1.1.1 were gathered from the README's "Version X
 Update" notes and the nuget.org version history, with the date nuget.org
 records for each upload. A version neither describes says so.
 
+## [1.1.1.3] - 2026-10-04
+
+* The NuGet package now embeds the root GitHub `README.md`, including its badges, as its only README. The OpenSSF Scorecard badge is served through `img.shields.io`, which NuGet supports.
+* CI and Publish verify that the packaged README exactly matches the root file.
+* No library API or runtime behavior changes.
+
 ## [1.1.1.2] - 2026-10-01
 
 * No change to the library's behaviour.
