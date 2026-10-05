@@ -5,7 +5,7 @@
 [![CI](https://github.com/WilliamSmithEdward/AndromedaTM1Sharp/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/WilliamSmithEdward/AndromedaTM1Sharp/actions/workflows/ci.yml)
 [![Security](https://github.com/WilliamSmithEdward/AndromedaTM1Sharp/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/WilliamSmithEdward/AndromedaTM1Sharp/actions/workflows/security.yml)
 [![Malware scan](https://github.com/WilliamSmithEdward/AndromedaTM1Sharp/actions/workflows/malware-scan.yml/badge.svg?branch=main)](https://github.com/WilliamSmithEdward/AndromedaTM1Sharp/actions/workflows/malware-scan.yml)
-[![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/WilliamSmithEdward/AndromedaTM1Sharp?label=OpenSSF%20Score)](https://scorecard.dev/viewer/?uri=github.com/WilliamSmithEdward/AndromedaTM1Sharp)
+[![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/WilliamSmithEdward/AndromedaTM1Sharp?label=openssf%20score)](https://scorecard.dev/viewer/?uri=github.com/WilliamSmithEdward/AndromedaTM1Sharp)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/WilliamSmithEdward/AndromedaTM1Sharp/blob/main/LICENSE)
 
 Author: William Smith  
